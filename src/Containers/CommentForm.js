@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import uuid from 'uuid/v4'
+import uuid from 'uuid/v4';
+import { connect } from "react-redux";
+import { addComment } from "../Actions";
 
-export default class CommentForm extends Component {
+class CommentForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,13 +19,12 @@ export default class CommentForm extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    let { blog, editBlog } = this.props;
-    editBlog({ ...blog, comments: [...blog.comments, {...this.state, id: uuid()}] })
+    let { blog, addComment } = this.props;
+    addComment(blog, { ...this.state, id: uuid() })
     this.setState({ comment: "" });
   }
 
   render() {
-    console.log("In the comments form, the props are", this.props);
     return (
       <div className="blog-form">
         <form onSubmit={this.handleSubmit}>
@@ -43,3 +44,11 @@ export default class CommentForm extends Component {
     )
   }
 }
+
+function mapStateToProps(state) {
+  return state;
+}
+
+const mapDispatchToProps = { addComment };
+
+export default connect(mapStateToProps,mapDispatchToProps)(CommentForm)

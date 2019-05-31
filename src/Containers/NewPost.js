@@ -1,13 +1,15 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom"
+import { connect } from "react-redux";
+import { addBlog } from "../Actions";
 
-export default class NewPost extends Component {
+class NewPost extends Component {
   constructor(props) {
     super(props);
     this.state = {
       title: '',
       description: '',
-      body: ''
+      body: '',
+      comments: {}
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -71,3 +73,14 @@ export default class NewPost extends Component {
     }
 }
 
+function mapStateToProps(state) {
+  return {
+    blogs: [...state.blogs]
+  };
+}
+
+const mapDispatchToProps = {
+  addBlog
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewPost);

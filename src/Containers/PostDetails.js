@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import CommentForm from './CommentForm';
 import CommentList from './CommentList';
+import { connect } from "react-redux";
+import { editBlog, removeBlog } from "../Actions";
 
 
-export default class PostDetails extends Component {
+class PostDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,11 +24,10 @@ export default class PostDetails extends Component {
   }
 
   componentDidMount() {
-    console.log("mounted alskjdflkajsdlfkslkdjflksdjflkjasdlk")
     const id = this.props.match.params.id;
     let blog = this.props.blogs.find(blog => blog.id === id);
 
-    this.setState({...blog, displayForm: false});
+    this.setState({ ...blog, displayForm: false });
   }
 
   handleChange(e) {
@@ -62,68 +63,77 @@ export default class PostDetails extends Component {
   }
 
   render() {
-    console.log("the post details form rendered due to a state change....")
     const id = this.props.match.params.id;
     let blog = this.props.blogs.find(blog => blog.id === id);
 
-    let postView; 
+    let postView;
     if (!this.state.displayForm) {
       postView = (
-       <div>
-      <h1>{blog.title} </h1>
-      <h3> {blog.description} </h3>
-      <p> {blog.body} </p>
-       <button onClick={this.handleEdit}> Edit </button>
-       <button onClick={this.handleDelete}> Delete </button>
-      </div>
-        ) 
+        <div>
+          <h1>{blog.title} </h1>
+          <h3> {blog.description} </h3>
+          <p> {blog.body} </p>
+          <button onClick={this.handleEdit}> Edit </button>
+          <button onClick={this.handleDelete}> Delete </button>
+        </div>
+      )
     } else {
-      postView =  <div className="blog-form">
-      <form onSubmit={this.handleSubmit}>
-        <div className="form-input">
-          <label htmlFor="title"></label>
-          <input
-            name="title"
-            id="form-element"
-            value={this.state.title}
-            placeholder={blog.title}
-            onChange={this.handleChange}
-            required />
-        </div>
-        <div>
-          <label htmlFor="description"></label>
-          <input
-            name="description"
-            id="form-element"
-            value={this.state.description}
-            placeholder={blog.description}
-            onChange={this.handleChange}
-            required />
-        </div>
-        <div>
-          <label htmlFor="body"></label>
-          <input
-            name="body"
-            id="form-element"
-            value={this.state.body}
-            placeholder={blog.body}
-            onChange={this.handleChange}
-            required
-          />
-        </div>
-        <button className="submit">Edit Post</button>
-      </form>
+      postView = <div className="blog-form">
+        <form onSubmit={this.handleSubmit}>
+          <div className="form-input">
+            <label htmlFor="title"></label>
+            <input
+              name="title"
+              id="form-element"
+              value={this.state.title}
+              placeholder={blog.title}
+              onChange={this.handleChange}
+              required />
+          </div>
+          <div>
+            <label htmlFor="description"></label>
+            <input
+              name="description"
+              id="form-element"
+              value={this.state.description}
+              placeholder={blog.description}
+              onChange={this.handleChange}
+              required />
+          </div>
+          <div>
+            <label htmlFor="body"></label>
+            <input
+              name="body"
+              id="form-element"
+              value={this.state.body}
+              placeholder={blog.body}
+              onChange={this.handleChange}
+              required
+            />
+          </div>
+          <button className="submit">Edit Post</button>
+        </form>
         <button className="cancel" onClick={this.handleCancel}>Cancel</button>
-    </div> 
+      </div>
     }
     return (
       <div>
         {postView}
-        <hr/>
+        <hr />
         <h1>Comments</h1>
-        < CommentList comments={blog.comments} deleteComment={this.props.deleteComment} blog={blog} />
-        < CommentForm editBlog={this.props.editBlog} blog={blog}/>
+        < CommentList comments={blog.comments} blog={blog} />
+        < CommentForm blog={blog} />
       </div>
     )
   }
 }
+
+function mapStateToProps(state) {
+  return { blogs: state.blogs }
+}
+
+const mapDispatchToProps = {
+  editBlog, removeBlog
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostDetails);

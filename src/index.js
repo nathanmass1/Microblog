@@ -7,7 +7,7 @@ import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.css';
 import { BrowserRouter } from "react-router-dom";
 
-import rootReducer from "./RootReducer";
+import rootReducer from "./rootReducer";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
 

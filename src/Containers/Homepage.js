@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import Post from "./Post"
+import Post from "./Post";
+import { connect } from "react-redux";
 
-export default class Homepage extends Component {
+class Homepage extends Component {
   render() {
     let { blogs } = this.props;
     return (
@@ -12,3 +13,11 @@ export default class Homepage extends Component {
     )
   }
 }
+
+function mapStateToProps(state) {
+  return { blogs: [...state.blogs] };
+}
+
+export default connect(mapStateToProps)(Homepage);
+
+

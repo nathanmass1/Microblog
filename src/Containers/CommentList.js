@@ -1,6 +1,8 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { connect } from "react-redux";
+import { removeComment } from "../Actions";
 
-export default class CommentList extends Component {
+class CommentList extends Component {
   constructor(props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
@@ -8,21 +10,30 @@ export default class CommentList extends Component {
 
   handleClick(evt) {
     evt.preventDefault();
-    let { deleteComment, blog, comments } = this.props;
-    let comment = comments.find(comment => comment.id === evt.target.name);
-    deleteComment(blog, comment);
+    let { removeComment, blog } = this.props;
+    removeComment(blog, evt.target.name);
   }
 
   render() {
     let { comments } = this.props;
-    console.log("In comments list, the props are: ", this.props);
+    let revisedComments = Object.entries(comments);
     return (
       <div>
-        {comments.map(comment => (
-          <div>
-            <p><button name={comment.id} onClick={this.handleClick}>X</button> {comment.comment}</p>
+        {revisedComments.map(comment => (
+          <div key={comment[0]}>
+            <p><button name={comment[0]} onClick={this.handleClick}>X</button> {comment[1]}</p>
           </div>))}
       </div>
     )
   }
 }
+
+function mapStateToProps(state) {
+  return state;
+}
+
+const mapDispatchToProps = {
+  removeComment
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CommentList)
