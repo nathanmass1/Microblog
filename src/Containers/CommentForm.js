@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import uuid from 'uuid/v4';
 import { connect } from "react-redux";
-import { addComment } from "../Actions";
+import { addCommentToAPI } from "../Actions";
 
 class CommentForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      comment: ""
+      text: ""
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -19,9 +18,9 @@ class CommentForm extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    let { blog, addComment } = this.props;
-    addComment(blog, { ...this.state, id: uuid() })
-    this.setState({ comment: "" });
+    let { blog, addCommentToAPI } = this.props;
+    addCommentToAPI(blog, this.state.text)
+    this.setState({ text: "" });
   }
 
   render() {
@@ -29,12 +28,12 @@ class CommentForm extends Component {
       <div className="blog-form">
         <form onSubmit={this.handleSubmit}>
           <div className="form-input">
-            <label htmlFor="comment"></label>
+            <label htmlFor="text"></label>
             <input
-              name="comment"
+              name="text"
               id="form-element"
-              value={this.state.comment}
-              placeholder="Comment"
+              value={this.state.text}
+              placeholder="Text"
               onChange={this.handleChange}
               required />
           </div>
@@ -49,6 +48,6 @@ function mapStateToProps(state) {
   return state;
 }
 
-const mapDispatchToProps = { addComment };
+const mapDispatchToProps = { addCommentToAPI };
 
 export default connect(mapStateToProps,mapDispatchToProps)(CommentForm)

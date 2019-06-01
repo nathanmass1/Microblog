@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import CommentForm from './CommentForm';
 import CommentList from './CommentList';
 import { connect } from "react-redux";
-import { editBlog, removeBlog } from "../Actions";
+import { editBlog, removeBlog, getBlogFromAPI } from "../Actions";
 
 
 class PostDetails extends Component {
@@ -14,7 +14,7 @@ class PostDetails extends Component {
       description: this.props.description,
       body: this.props.body,
       id: this.props.match.params.id,
-      comments: this.props.blogs.find(blog => blog.id === this.props.match.params.id).comments
+      comments: []
     }
     this.handleEdit = this.handleEdit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
@@ -25,8 +25,8 @@ class PostDetails extends Component {
 
   componentDidMount() {
     const id = this.props.match.params.id;
+    this.props.getBlogFromAPI(id);
     let blog = this.props.blogs.find(blog => blog.id === id);
-
     this.setState({ ...blog, displayForm: false });
   }
 
@@ -64,7 +64,8 @@ class PostDetails extends Component {
 
   render() {
     const id = this.props.match.params.id;
-    let blog = this.props.blogs.find(blog => blog.id === id);
+    let blog = this.props.blogs.find(blog => blog.id === +id);
+    console.log("BLOG", blog);
 
     let postView;
     if (!this.state.displayForm) {
@@ -133,7 +134,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  editBlog, removeBlog
+  editBlog, removeBlog,  getBlogFromAPI 
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostDetails);

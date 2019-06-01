@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { removeComment } from "../Actions";
+import { removeCommentFromAPI } from "../Actions";
 
 class CommentList extends Component {
   constructor(props) {
@@ -10,18 +10,18 @@ class CommentList extends Component {
 
   handleClick(evt) {
     evt.preventDefault();
-    let { removeComment, blog } = this.props;
-    removeComment(blog, evt.target.name);
+    let { removeCommentFromAPI, blog } = this.props;
+    removeCommentFromAPI(blog, evt.target.name);
   }
 
   render() {
     let { comments } = this.props;
-    let revisedComments = Object.entries(comments);
+    // let revisedComments = Object.entries(comments);
     return (
       <div>
-        {revisedComments.map(comment => (
-          <div key={comment[0]}>
-            <p><button name={comment[0]} onClick={this.handleClick}>X</button> {comment[1]}</p>
+        {comments.map(comment => (
+          <div key={comment.id}>
+            <p><button name={comment.id} onClick={this.handleClick}>X</button> {comment.text}</p>
           </div>))}
       </div>
     )
@@ -33,7 +33,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  removeComment
+  removeCommentFromAPI
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CommentList)

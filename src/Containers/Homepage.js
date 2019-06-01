@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import Post from "./Post";
 import { connect } from "react-redux";
+import { getBlogsFromAPI } from '../Actions'
 
 class Homepage extends Component {
+  componentDidMount() {
+    this.props.getBlogsFromAPI();
+  }
+
   render() {
     let { blogs } = this.props;
     return (
@@ -18,6 +23,6 @@ function mapStateToProps(state) {
   return { blogs: [...state.blogs] };
 }
 
-export default connect(mapStateToProps)(Homepage);
+export default connect(mapStateToProps, { getBlogsFromAPI })(Homepage);
 
 
